@@ -1,0 +1,10 @@
+if { [info exists ::env(VERILOG_INPUT)] }       { set VERILOG_INPUT $::env(VERILOG_INPUT) }       else { puts "Please set VERILOG_INPUT environment variable"; exit 1 }
+if { [info exists ::env(VERILOG_OUTPUT)] }      { set VERILOG_OUTPUT $::env(VERILOG_OUTPUT) }     else { puts "Please set VERILOG_OUTPUT environment variable"; exit 1 }
+
+yosys read_verilog -defer -sv $VERILOG_INPUT
+yosys hierarchy -top top -check
+
+# If this line is removed, then the output's simulation matches with the input design
+yosys opt
+
+yosys write_verilog -sv -noattr $VERILOG_OUTPUT
